@@ -1,0 +1,19 @@
+{
+  "name": "csarch2simulationproject",
+  "version": "1.0.0",
+  "description": "1. should handle more than seven digits properly \r     2. provide an option for the user to choose the round-off method \r     3. also, it can support NaN input",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CSARCH2-07/CSARCH2SimulationProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CSARCH2-07/CSARCH2SimulationProject/issues"
+  },
+  "homepage": "https://github.com/CSARCH2-07/CSARCH2SimulationProject#readme"
+}
