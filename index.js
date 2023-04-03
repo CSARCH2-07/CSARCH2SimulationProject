@@ -130,7 +130,7 @@ $(document).ready(function() {
             $("#num").val('0');
         }
         
-        if (!$("#exponent").text()) {
+        if (!$("#exponent").val()) {
             exp = 0;
             $("#exponent").val('0');
         }
@@ -179,10 +179,10 @@ $(document).ready(function() {
         var bcd2 = toBCD(num.slice(digitAfterPoint + 3, num.length));
         
         if(isPositive) {
-            $("#sign").val("0");
+            $("#sign").text("0");
         }
         else {
-            $("#sign").val("1");
+            $("#sign").text("1");
         }
 
         if(MSD[0] === '0') {
@@ -194,10 +194,9 @@ $(document).ready(function() {
 
         var exponentContinuation = E.slice(2, E.length);
 
-        $("#combination-field").val(combinationField);
-        $("#exponent-continuation").val(exponentContinuation);
-        $("#bcd1").val(bcd1);
-        $("#bcd2").val(bcd2);
-
+        $("#combination-field").text(parseInt(combinationField));
+        $("#exponent-continuation").text(parseInt(exponentContinuation));
+        $("#bcd1").text(parseInt(bcd1));
+        $("#bcd2").text(parseInt(bcd2));
     })
 })
