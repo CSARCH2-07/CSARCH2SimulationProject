@@ -12,7 +12,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
         <style>
             body{
-                background-color: #ffbcda;
+                background-image: linear-gradient(120deg,#ffbcda,#ff4d9d);
+                background-attachment: fixed;
                 font-family: "Karla", sans-serif;
                 color:#2c2c2c;
             }
@@ -21,7 +22,7 @@
                 padding-right: 20vw;
             }
             .btn{
-                padding: 1.5vw 4vw 1.5vw 4vw;
+                padding: 15px 60px;
                 border-radius: 13px;
             }
             
@@ -39,14 +40,14 @@
                         <input type="text" class="form-control" id="floatingInputGroup1" placeholder="1.234567">
                         <label for="floatingInputGroup1">Decimal Input</label>
                     </div>
-                    <span class="input-group-text">x2^</span>
+                    <span class="input-group-text">x10^</span>
                     <div class="form-floating">
                       <input type="text" class="form-control" id="floatingInputGroup2" placeholder="7">
                       <label for="floatingInputGroup2">Exponent</label>
                     </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-success" style="margin:auto; margin-top: 1vw; display: block;">
+                <button type="button" class="btn btn-success" style="margin:auto; margin-top: 1vw; display: block;" onclick="convert()">
                     Convert
                 </button>
             </form>
