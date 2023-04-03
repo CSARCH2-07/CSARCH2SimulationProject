@@ -199,4 +199,39 @@ $(document).ready(function() {
         $("#bcd1").text(bcd1);
         $("#bcd2").text(bcd2);
     })
+	
+	$("#export").click(function() {
+		var inputNum = document.getElementById("num").value;
+		var inputExp = document.getElementById("exponent").value;
+        var outputSign = document.getElementById("sign").innerHTML;
+        var outputComb = document.getElementById("combination-field").innerHTML;
+        var outputExp = document.getElementById("exponent-continuation").innerHTML;
+        var outputBCD1 = document.getElementById("bcd1").innerHTML;
+        var outputBCD2 = document.getElementById("bcd2").innerHTML;
+        var outputHex = document.getElementById("hex").innerHTML;
+		
+		var data = "";
+		data += "IEEE-754 Decimal-32 Floating-Point Converter" + "\n"
+		data += "---------------------------------------------------------------------" + "\n";
+		
+		data += "Input: " + inputNum + " x10^ " + inputExp + "\n";
+		data += "\n";	
+		
+		data += "Sign: " + outputSign + "\n";
+		data += "Combination Field: " + outputComb + "\n";
+		data += "Exponent Continuation: " + outputExp + "\n";
+		data += "First 10 BCD: " + outputBCD1 + "\n";
+		data += "Last 10 BCD: " + outputBCD2 + "\n";
+		data += "\n";	
+		
+        data += "Hexadecimal Equivalent: " + outputHex;
+
+        const link = document.createElement("a");
+        const file = new Blob([data],{type:"text/plain"});
+
+		link.href = URL.createObjectURL(file);
+		link.download = 'DecimalToText.txt';
+        link.click();
+        URL.revokeObjectURL(link.href);
+	})		
 })
