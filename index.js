@@ -194,9 +194,9 @@ $(document).ready(function() {
 
         var exponentContinuation = E.slice(2, E.length);
 
-        $("#combination-field").text(parseInt(combinationField));
-        $("#exponent-continuation").text(parseInt(exponentContinuation));
-        $("#bcd1").text(parseInt(bcd1));
-        $("#bcd2").text(parseInt(bcd2));
+        $("#combination-field").text(combinationField);
+        $("#exponent-continuation").text(exponentContinuation);
+        $("#bcd1").text(bcd1);
+        $("#bcd2").text(bcd2);
     })
 })
