@@ -158,7 +158,7 @@ $(document).ready(function() {
         var digitAfterPoint = 1;
 
         // move decimal point if needed
-        if (pointIndex != -1 && pointIndex > 1) {
+        if (pointIndex != -1 && pointIndex >= 1) {
             var numToMove = pointIndex - 1; 
             exp = exp + numToMove; 
             // move point 
