@@ -203,6 +203,9 @@ $(document).ready(function () {
         var bcd2 = toBCD(num.slice(digitAfterPoint + 3, num.length));
       }
     }
+    if (num === 'NaN') {
+      $('#sign').text('0');
+    }
 
     $('#combination-field').text(combinationField);
     $('#exponent-continuation').text(exponentContinuation);
