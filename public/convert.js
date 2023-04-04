@@ -189,7 +189,7 @@ $(document).ready(function () {
             var combinationField = ePrime.slice(0, 2) + msd.slice(1, msd.length);
         }
         else {
-            var combinationField = '11' + ePrime.slice(0, 3) + msd[3];
+            var combinationField = '11' + ePrime.slice(0, 2) + msd[3];
         }
 
         var exponentContinuation = ePrime.slice(2, ePrime.length);
