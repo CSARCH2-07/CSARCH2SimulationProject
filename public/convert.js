@@ -186,7 +186,7 @@ $(document).ready(function () {
         }
 
         if (msd[0] === '0') {
-            var combinationField = ePrime.slice(0, 3) + msd.slice(1, msd.length);
+            var combinationField = ePrime.slice(0, 2) + msd.slice(1, msd.length);
         }
         else {
             var combinationField = '11' + ePrime.slice(0, 3) + msd[3];
