@@ -122,8 +122,7 @@ $(document).ready(function () {
 
     $("#submit").click(function () {
 
-        var num = parseFloat($("#num").val())
-        var exp = parseInt($("#exponent").val())
+        var num = $("#num").val(); 
 
         if (!$("#num").val()) {
             num = 0;
@@ -139,60 +138,81 @@ $(document).ready(function () {
 
         // perform steps 
         // get sign 
-        if (num < 0) {
-            isPositive = false;
-        }
 
-        num = Math.abs(num);
-        num = num.toString();
-
-        var numLength = getLength(num);
-
-        // standardize 
-        // extend 0's if needed 
-        if (numLength < 7) {
-            num = extend(num, 7);
-        }
-
-        var pointIndex = getPointIndex(num);
-        var digitAfterPoint = 1;
-
-        // move decimal point if needed
-        if (pointIndex != -1 && pointIndex >= 1) {
-            var numToMove = pointIndex - 1;
-            exp = exp + numToMove;
-            // move point 
-            num = standardizePoint(num); // TODO change to remove point 
-            digitAfterPoint = 2;
-        }
-
-        // get MSD
-        var msd = extend(getBinary(num[0]), 4);
-
-        // get E 
-        var ePrime = exp + 101;
-        ePrime = extend(getBinary(ePrime.toString()), 8);
-
-        // get BCD 
-
-        var bcd1 = toBCD(num.slice(digitAfterPoint, digitAfterPoint + 3));
-        var bcd2 = toBCD(num.slice(digitAfterPoint + 3, num.length));
-
-        if (isPositive) {
-            $("#sign").text("0");
+        if(num === 'NaN') {
+            
         }
         else {
-            $("#sign").text("1");
-        }
 
-        if (msd[0] === '0') {
-            var combinationField = ePrime.slice(0, 2) + msd.slice(1, msd.length);
-        }
-        else {
-            var combinationField = '11' + ePrime.slice(0, 2) + msd[3];
-        }
+            num = parseFloat(num);  // to remove any leading zeros 
+            var exp = parseInt($("#exponent").val()); 
 
-        var exponentContinuation = ePrime.slice(2, ePrime.length);
+            if (num < 0) {
+                isPositive = false;
+            }
+
+            num = Math.abs(num);
+            num = num.toString();
+
+            var numLength = getLength(num);
+
+            // standardize 
+            // extend 0's if needed 
+            if (numLength < 7) {
+                num = extend(num, 7);
+            }
+
+            var pointIndex = getPointIndex(num);
+            var digitAfterPoint = 1;
+
+            // move decimal point if needed
+            if (pointIndex != -1 && pointIndex >= 1) {
+                var numToMove = pointIndex - 1;
+                exp = exp + numToMove;
+                // move point 
+                num = standardizePoint(num); // TODO change to remove point 
+                digitAfterPoint = 2;
+            }
+
+            // get MSD
+            var msd = extend(getBinary(num[0]), 4);
+
+            // get E 
+            var ePrime = exp + 101;
+            ePrime = extend(getBinary(ePrime.toString()), 8);
+
+            if (isPositive) {
+                $("#sign").text("0");
+            }
+            else {
+                $("#sign").text("1");
+            }
+
+            if(exp > 90) {
+                var combinationField = '11110';
+                var exponentContinuation = '000000'
+                var bcd1 = '0000000000'
+                var bcd2 = '0000000000'
+            }
+            else {
+
+                if (msd[0] === '0') {
+                    var combinationField = ePrime.slice(0, 2) + msd.slice(1, msd.length);
+                }
+                else {
+                    var combinationField = '11' + ePrime.slice(0, 2) + msd[3];
+                }
+
+                var exponentContinuation = ePrime.slice(2, ePrime.length);
+
+                // get BCD 
+
+                var bcd1 = toBCD(num.slice(digitAfterPoint, digitAfterPoint + 3));
+                var bcd2 = toBCD(num.slice(digitAfterPoint + 3, num.length));
+
+            }
+
+        }
 
         $("#combination-field").text(combinationField);
         $("#exponent-continuation").text(exponentContinuation);
