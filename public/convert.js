@@ -239,6 +239,8 @@ $(document).ready(function () {
     data += 'Last 10 BCD: ' + outputBCD2 + '\n';
     data += '\n';
 
+
+	data += "Binary Floating-Point: " + outputSign + outputComb + outputExp + outputBCD1 + outputBCD2 + "\n";
     data += 'Hexadecimal Equivalent: ' + outputHex;
 
     const link = document.createElement('a');
