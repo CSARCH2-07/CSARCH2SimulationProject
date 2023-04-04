@@ -76,6 +76,16 @@
             <label for="exponent">Exponent</label>
           </div>
         </div>
+
+        <label for="rounding">Choose a rounding method:</label>
+
+        <select name="rounding" id="rounding">
+          <option value="truncate">Truncate</option>
+          <option value="ceiling">Ceiling</option>
+          <option value="floor">Floor</option>
+          <option value="rtnte">Round to nearest, ties to even</option>
+        </select>
+
         <button
           type="button"
           id="submit"
@@ -85,15 +95,6 @@
           Convert
         </button>
       </form>
-
-      <label for="rounding">Choose a rounding method:</label>
-
-      <select name="rounding" id="rounding">
-        <option value="truncate">Truncate</option>
-        <option value="ceiling">Ceiling</option>
-        <option value="floor">Floor</option>
-        <option value="rtnte">Round to nearest, ties to even</option>
-      </select>
 
       <div class="input-group mb-3">
         <div class="form-floating">
