@@ -29,7 +29,6 @@
       body {
         background-image: linear-gradient(120deg, #ffbcda, #ff4d9d);
         background-attachment: fixed;
-        animation: backwards;
         font-family: 'Karla', sans-serif;
         color: #2c2c2c;
       }
@@ -58,13 +57,13 @@
           style="padding-left: 25vw; padding-right: 25vw"
         >
           <div class="form-floating">
-            <input type="text" class="form-control" id="num" placeholder="0" />
+            <input type="number" class="form-control" id="num" placeholder="0" />
             <label for="num">Decimal Input</label>
           </div>
           <span class="input-group-text">x10^</span>
           <div class="form-floating">
             <input
-              type="text"
+              type="number"
               class="form-control"
               id="exponent"
               placeholder="0"
