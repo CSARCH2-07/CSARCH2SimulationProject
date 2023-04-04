@@ -57,7 +57,12 @@
           style="padding-left: 25vw; padding-right: 25vw"
         >
           <div class="form-floating">
-            <input type="number" class="form-control" id="num" placeholder="0" />
+            <input
+              type="number"
+              class="form-control"
+              id="num"
+              placeholder="0"
+            />
             <label for="num">Decimal Input</label>
           </div>
           <span class="input-group-text">x10^</span>
@@ -80,6 +85,15 @@
           Convert
         </button>
       </form>
+
+      <label for="cars">Choose a rounding method:</label>
+
+      <select name="rounding" id="rounding">
+        <option value="truncate">Truncate</option>
+        <option value="ceiling">Ceiling</option>
+        <option value="floor">Floor</option>
+        <option value="rtnte">Round to nearest, ties to even</option>
+      </select>
 
       <div class="input-group mb-3">
         <div class="form-floating">
