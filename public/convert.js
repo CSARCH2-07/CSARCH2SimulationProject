@@ -112,6 +112,38 @@ $(document).ready(function () {
     return bcd;
   }
 
+  function ApplyRounding(roundingMethod, num) {
+    if (num.length > 7) {
+      trimmedNumber = num.slice(0, 7);
+      remainingNumber = num.slice(7);
+
+      num = trimmedNumber + '.' + remainingNumber;
+      num = parseFloat(num);
+
+      if (roundingMethod === 'truncate') {
+        return trimmedNumber;
+      } else if (roundingMethod === 'up') {
+        return String(Math.ceil(num));
+      } else if (roundingMethod === 'down') {
+        return String(Math.floor(num));
+      } else {
+        // if round to nearest ties to even
+        var d = 0; // decimal places
+        var m = Math.pow(10, d);
+        var n = +(d ? num * m : num).toFixed(8); // Avoid rounding errors
+        var i = Math.floor(n),
+          f = n - i;
+        var e = 1e-8; // Allow for rounding errors in f
+        var r =
+          f > 0.5 - e && f < 0.5 + e ? (i % 2 == 0 ? i : i + 1) : Math.round(n);
+
+        return String(d ? r / m : r);
+      }
+    }
+
+    return num; // if < 7 length do not edit
+  }
+
   $('#submit').click(function () {
     var num = $('#num').val();
 
@@ -162,11 +194,16 @@ $(document).ready(function () {
       }
 
       // TODO insert rounding
+      console.log('num before rounding');
       console.log(num);
-      console.log(getPointIndex(num));
-      console.log(normalize(num));
-      console.log('exp');
-      console.log(exp);
+      roundingMethod = document.getElementById('rounding').value;
+      num = ApplyRounding(roundingMethod, num);
+      console.log('num');
+      console.log(num);
+      // console.log('point index:');
+      // console.log(getPointIndex(num));
+      // console.log('exp');
+      // console.log(exp);
 
       // standardize
       // extend 0's if needed
@@ -185,8 +222,10 @@ $(document).ready(function () {
       //   num = normalize(num);
       // }
 
-      console.log('num after normalization');
-      console.log(num);
+      // console.log('typeof');
+      // console.log(typeof num);
+      // console.log('num after normalization');
+      // console.log(num);
 
       // get MSD
       var msd = extend(getBinary(num[0]), 4);
@@ -234,7 +273,7 @@ $(document).ready(function () {
       bcd2.toString();
     var temp = parseInt(binaryRes, 2).toString(16).toUpperCase();
 
-    console.log(exp);
+    // console.log(exp);
     $('#combination-field').text(combinationField);
     $('#exponent-continuation').text(exponentContinuation);
     $('#bcd1').text(bcd1);

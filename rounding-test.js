@@ -12,9 +12,9 @@ function ApplyRounding(roundingMethod, num) {
 
     if (roundingMethod === 'truncate') {
       return trimmedNumber;
-    } else if (roundingMethod === 'ceiling') {
+    } else if (roundingMethod === 'up') {
       return String(Math.ceil(num));
-    } else if (roundingMethod === 'floor') {
+    } else if (roundingMethod === 'down') {
       return String(Math.floor(num));
     } else {
       // if round to nearest ties to even
@@ -35,7 +35,7 @@ function ApplyRounding(roundingMethod, num) {
 }
 
 // main
-num = '12345665';
+num = '12345678';
 console.log('RESULTS---------');
 console.log(ApplyRounding('truncate', num));
 console.log(ApplyRounding('ceiling', num));
