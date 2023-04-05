@@ -126,6 +126,7 @@ $(document).ready(function () {
         }
 
         var isPositive = true;
+        var sign = 0;
 
         // perform steps
         // get sign
@@ -141,6 +142,7 @@ $(document).ready(function () {
 
             if (num < 0) {
                 isPositive = false;
+                sign = 1;
             }
 
             num = Math.abs(num);
@@ -200,12 +202,18 @@ $(document).ready(function () {
         }
         if (num === 'NaN') {
             $('#sign').text('0');
+            sign = 0;
         }
+
+        var binaryRes = sign.toString() + combinationField.toString() + exponentContinuation.toString() +bcd1.toString()+bcd2.toString();
+        var temp = parseInt(binaryRes, 2).toString(16).toUpperCase();
+
 
         $('#combination-field').text(combinationField);
         $('#exponent-continuation').text(exponentContinuation);
         $('#bcd1').text(bcd1);
         $('#bcd2').text(bcd2);
+        $('#hex').text(temp);
     });
 
     $('#export').click(function () {
