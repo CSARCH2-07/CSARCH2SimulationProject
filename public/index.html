@@ -40,6 +40,19 @@
         padding: 15px 60px;
         border-radius: 13px;
       }
+      .selectpicker{
+        background-color: #f4f4f4;
+        padding-left: 0.5vw;
+        padding-right: 1vw;
+        border-color: #dce4e4;
+        border-radius: 5px;
+        background-position: right 1vw;
+      
+      }
+      .selectpicker select{
+        position: absolute;
+        padding-right: 2vw;
+      }
     </style>
 
     <div class="container-fluid align-content-center" style="margin-top: 5vw">
@@ -57,7 +70,7 @@
           style="padding-left: 25vw; padding-right: 25vw"
         >
           <div class="form-floating">
-            <input type="number" class="form-control" id="num" placeholder="0" />
+            <input type="text" class="form-control" id="num" placeholder="0" />
             <label for="num">Decimal Input</label>
           </div>
           <span class="input-group-text">x10^</span>
@@ -68,8 +81,14 @@
               id="exponent"
               placeholder="0"
             />
-            <label for="exponent">Exponent</label>
+            <label for="exponent">Exponent</label> 
           </div>
+          <select class="selectpicker" id="rounding" aria-label="Example select with button addon">
+            <option value="1">Round Up</option>
+            <option value="2">Round Down</option>
+            <option value="3">Truncate</option>
+            <option selected>Round To Even</option>
+          </select>
         </div>
         <button
           type="button"
