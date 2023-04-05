@@ -193,39 +193,14 @@ $(document).ready(function () {
         num = normalize(num);
       }
 
-      // TODO insert rounding
-      console.log('num before rounding');
-      console.log(num);
       roundingMethod = document.getElementById('rounding').value;
       num = ApplyRounding(roundingMethod, num);
-      console.log('num');
-      console.log(num);
-      // console.log('point index:');
-      // console.log(getPointIndex(num));
-      // console.log('exp');
-      // console.log(exp);
 
       // standardize
       // extend 0's if needed
       if (numLength < 7) {
         num = extend(num, 7);
       }
-
-      // var pointIndex = getPointIndex(num);
-      // var digitAfterMSD = 1;
-
-      // // move decimal point if needed
-      // if (pointIndex != -1) {
-      //   var numToMove = 7 - pointIndex;
-      //   exp = exp - numToMove;
-      //   // remove point
-      //   num = normalize(num);
-      // }
-
-      // console.log('typeof');
-      // console.log(typeof num);
-      // console.log('num after normalization');
-      // console.log(num);
 
       // get MSD
       var msd = extend(getBinary(num[0]), 4);
@@ -273,7 +248,6 @@ $(document).ready(function () {
       bcd2.toString();
     var temp = parseInt(binaryRes, 2).toString(16).toUpperCase();
 
-    // console.log(exp);
     $('#combination-field').text(combinationField);
     $('#exponent-continuation').text(exponentContinuation);
     $('#bcd1').text(bcd1);
