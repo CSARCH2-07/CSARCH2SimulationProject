@@ -128,16 +128,17 @@ $(document).ready(function () {
         return String(Math.floor(num));
       } else {
         // if round to nearest ties to even
-        var d = 0; // decimal places
-        var m = Math.pow(10, d);
-        var n = +(d ? num * m : num).toFixed(8); // Avoid rounding errors
+        // sourced from bankers-rounding npm module by Tronin
+        var dec = 0; // number of decimal places
+        var base = Math.pow(10, dec);
+        var n = +(dec ? num * base : num).toFixed(8); // prevents errors in rounding
         var i = Math.floor(n),
           f = n - i;
-        var e = 1e-8; // Allow for rounding errors in f
+        var e = 1e-8;
         var r =
           f > 0.5 - e && f < 0.5 + e ? (i % 2 == 0 ? i : i + 1) : Math.round(n);
 
-        return String(d ? r / m : r);
+        return String(dec ? r / base : r);
       }
     }
 
