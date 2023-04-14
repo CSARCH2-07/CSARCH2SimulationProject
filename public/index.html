@@ -40,7 +40,7 @@
         padding: 15px 60px;
         border-radius: 13px;
       }
-      .selectpicker{
+      .selectpicker {
         background-color: #f4f4f4;
         padding-left: 0.5vw;
         padding-right: 2vw;
@@ -48,7 +48,6 @@
         border-radius: 6px;
         background-position: right 1vw;
       }
-
     </style>
 
     <div class="container-fluid align-content-center" style="margin-top: 5vw">
@@ -77,15 +76,20 @@
               id="exponent"
               placeholder="0"
             />
-            <label for="exponent">Exponent</label> 
+            <label for="exponent">Exponent</label>
           </div>
-            <select class="selectpicker" id="rounding">
-              <option value="1">Round Up</option>
-              <option value="2">Round Down</option>
-              <option value="3">Truncate</option>
-              <option selected>Round To Even</option>
-            </select>
+          <select
+            class="selectpicker"
+            id="rounding"
+            aria-label="Example select with button addon"
+          >
+            <option value="up">Round Up</option>
+            <option value="down">Round Down</option>
+            <option value="truncate">Truncate</option>
+            <option value="rtnte" selected>Round To Even</option>
+          </select>
         </div>
+
         <button
           type="button"
           id="submit"

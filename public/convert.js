@@ -1,257 +1,303 @@
 $(document).ready(function () {
-    function getPointIndex(num) {
-        for (i = 0; i < num.length; i++) {
-            if (num[i] === '.') {
-                return i;
-            }
-        }
-
-        return -1;
+  function getPointIndex(num) {
+    for (i = 0; i < num.length; i++) {
+      if (num[i] === '.') {
+        return i;
+      }
     }
 
-    function getLength(num) {
-        numLength = 0;
-        for (i = 0; i < num.length; i++) {
-            if (num[i] >= '0' && num[i] <= '9') {
-                numLength++;
-            }
-        }
+    return -1;
+  }
 
-        return numLength;
+  function getLength(num) {
+    numLength = 0;
+    for (i = 0; i < num.length; i++) {
+      if (num[i] >= '0' && num[i] <= '9') {
+        numLength++;
+      }
     }
 
-    function extend(num, desiredLength) {
-        var toAdd = desiredLength - getLength(num);
-        var zeros = '';
-        for (i = 0; i < toAdd; i++) {
-            zeros = zeros.concat('0');
-        }
+    return numLength;
+  }
 
-        return zeros + num;
+  function extend(num, desiredLength) {
+    var toAdd = desiredLength - getLength(num);
+    var zeros = '';
+    for (i = 0; i < toAdd; i++) {
+      zeros = zeros.concat('0');
     }
 
-    function normalize(num) {
-        num =
-            num.slice(0, getPointIndex(num)) +
-            num.slice(getPointIndex(num) + 1, num.length);
-        return num;
+    return zeros + num;
+  }
+
+  function normalize(num) {
+    num =
+      num.slice(0, getPointIndex(num)) +
+      num.slice(getPointIndex(num) + 1, num.length);
+    return num;
+  }
+
+  function getBinary(num) {
+    var temp = parseInt(num);
+    var result = '';
+    while (temp != 0) {
+      if (temp % 2 == 0) {
+        result = result.concat('0');
+      } else {
+        result = result.concat('1');
+      }
+
+      temp = Math.floor(temp / 2);
     }
 
-    function getBinary(num) {
-        var temp = parseInt(num);
-        var result = '';
-        while (temp != 0) {
-            if (temp % 2 == 0) {
-                result = result.concat('0');
-            } else {
-                result = result.concat('1');
-            }
+    result = result.split('');
+    result = result.reverse();
+    result = result.join('');
 
-            temp = Math.floor(temp / 2);
-        }
+    return result;
+  }
 
-        result = result.split('');
-        result = result.reverse();
-        result = result.join('');
+  function toBCD(num) {
+    var digit0 = extend(getBinary(num[0]), 4);
+    var digit1 = extend(getBinary(num[1]), 4);
+    var digit2 = extend(getBinary(num[2]), 4);
 
-        return result;
+    var a = digit0[0];
+    var e = digit1[0];
+    var i = digit2[0];
+
+    var aei = a + e + i;
+
+    var bcd = 0000000000;
+
+    if (aei === '000') {
+      bcd =
+        digit0.slice(1, digit0.length) +
+        digit1.slice(1, digit1.length) +
+        '0' +
+        digit2.slice(1, digit2.length);
+    } else if (aei === '001') {
+      bcd =
+        digit0.slice(1, digit0.length) +
+        digit1.slice(1, digit1.length) +
+        '100' +
+        digit2[3];
+    } else if (aei === '010') {
+      bcd =
+        digit0.slice(1, digit0.length) +
+        digit2.slice(1, 3) +
+        digit1[3] +
+        '101' +
+        digit2[3];
+    } else if (aei === '011') {
+      bcd =
+        digit0.slice(1, digit0.length) + '10' + digit1[3] + '111' + digit2[3];
+    } else if (aei === '100') {
+      bcd =
+        digit2.slice(1, 3) +
+        digit0[3] +
+        digit1.slice(1, digit1.length) +
+        '110' +
+        digit2[3];
+    } else if (aei === '101') {
+      bcd =
+        digit1.slice(1, 3) + digit0[3] + '01' + digit1[3] + '111' + digit2[3];
+    } else if (aei === '110') {
+      bcd =
+        digit2.slice(1, 3) + digit0[3] + '00' + digit1[3] + '111' + digit2[3];
+    } else if (aei === '111') {
+      bcd = '00' + digit0[3] + '11' + digit1[3] + '111' + digit2[3];
     }
 
-    function toBCD(num) {
-        var digit0 = extend(getBinary(num[0]), 4);
-        var digit1 = extend(getBinary(num[1]), 4);
-        var digit2 = extend(getBinary(num[2]), 4);
+    return bcd;
+  }
 
-        var a = digit0[0];
-        var e = digit1[0];
-        var i = digit2[0];
+  function ApplyRounding(roundingMethod, num) {
+    if (num.length > 7) {
+      trimmedNumber = num.slice(0, 7);
+      remainingNumber = num.slice(7);
 
-        var aei = a + e + i;
+      num = trimmedNumber + '.' + remainingNumber;
+      num = parseFloat(num);
 
-        var bcd = 0000000000;
+      if (roundingMethod === 'truncate') {
+        return trimmedNumber;
+      } else if (roundingMethod === 'up') {
+        return String(Math.ceil(num));
+      } else if (roundingMethod === 'down') {
+        return String(Math.floor(num));
+      } else {
+        // if round to nearest ties to even
+        // sourced from bankers-rounding npm module by Tronin
+        var dec = 0; // number of decimal places
+        var base = Math.pow(10, dec);
+        var n = +(dec ? num * base : num).toFixed(8); // prevents errors in rounding
+        var i = Math.floor(n),
+          f = n - i;
+        var e = 1e-8;
+        var r =
+          f > 0.5 - e && f < 0.5 + e ? (i % 2 == 0 ? i : i + 1) : Math.round(n);
 
-        if (aei === '000') {
-            bcd =
-                digit0.slice(1, digit0.length) +
-                digit1.slice(1, digit1.length) +
-                '0' +
-                digit2.slice(1, digit2.length);
-        } else if (aei === '001') {
-            bcd =
-                digit0.slice(1, digit0.length) +
-                digit1.slice(1, digit1.length) +
-                '100' +
-                digit2[3];
-        } else if (aei === '010') {
-            bcd =
-                digit0.slice(1, digit0.length) +
-                digit2.slice(1, 3) +
-                digit1[3] +
-                '101' +
-                digit2[3];
-        } else if (aei === '011') {
-            bcd =
-                digit0.slice(1, digit0.length) + '10' + digit1[3] + '111' + digit2[3];
-        } else if (aei === '100') {
-            bcd =
-                digit2.slice(1, 3) +
-                digit0[3] +
-                digit1.slice(1, digit1.length) +
-                '110' +
-                digit2[3];
-        } else if (aei === '101') {
-            bcd =
-                digit1.slice(1, 3) + digit0[3] + '01' + digit1[3] + '111' + digit2[3];
-        } else if (aei === '110') {
-            bcd =
-                digit2.slice(1, 3) + digit0[3] + '00' + digit1[3] + '111' + digit2[3];
-        } else if (aei === '111') {
-            bcd = '00' + digit0[3] + '11' + digit1[3] + '111' + digit2[3];
-        }
-
-        return bcd;
+        return String(dec ? r / base : r);
+      }
     }
 
-    $('#submit').click(function () {
-        var num = $('#num').val();
+    return num; // if < 7 length do not edit
+  }
 
-        if (!$('#num').val()) {
-            num = 0;
-            $('#num').val('0');
-        }
+  $('#submit').click(function () {
+    var num = $('#num').val();
 
-        if (!$('#exponent').val()) {
-            exp = 0;
-            $('#exponent').val('0');
-        }
+    if (!$('#num').val()) {
+      num = 0;
+      $('#num').val('0');
+    }
 
-        var isPositive = true;
-        var sign = 0;
+    if (!$('#exponent').val()) {
+      exp = 0;
+      $('#exponent').val('0');
+    }
 
-        // perform steps
-        // get sign
+    var isPositive = true;
+    var sign = 0;
 
-        if (num === 'NaN') {
-            var combinationField = '11111';
-            var exponentContinuation = '000000';
-            var bcd1 = '0000000000';
-            var bcd2 = '0000000000';
+    // perform steps
+    // get sign
+
+    if (num === 'NaN') {
+      var combinationField = '11111';
+      var exponentContinuation = '000000';
+      var bcd1 = '0000000000';
+      var bcd2 = '0000000000';
+    } else {
+      num = parseFloat(num); // to remove any leading zeros
+      var exp = parseInt($('#exponent').val());
+
+      if (num < 0) {
+        isPositive = false;
+        sign = 1;
+      }
+
+      num = Math.abs(num);
+      num = num.toString();
+
+      var numLength = getLength(num);
+
+      var pointIndex = getPointIndex(num);
+      var digitAfterMSD = 1;
+
+      // move decimal point if needed
+      if (pointIndex != -1) {
+        var numToMove = 7 - pointIndex;
+        exp = exp - numToMove;
+        // remove point
+        num = normalize(num);
+      }
+
+      roundingMethod = document.getElementById('rounding').value;
+      num = ApplyRounding(roundingMethod, num);
+
+      // standardize
+      // extend 0's if needed
+      if (numLength < 7) {
+        num = extend(num, 7);
+      }
+
+      // get MSD
+      var msd = extend(getBinary(num[0]), 4);
+
+      // get E
+      var ePrime = exp + 101;
+      ePrime = extend(getBinary(ePrime.toString()), 8);
+
+      if (isPositive) {
+        $('#sign').text('0');
+      } else {
+        $('#sign').text('1');
+      }
+
+      if (exp > 90) {
+        var combinationField = '11110';
+        var exponentContinuation = '000000';
+        var bcd1 = '0000000000';
+        var bcd2 = '0000000000';
+      } else {
+        if (msd[0] === '0') {
+          var combinationField = ePrime.slice(0, 2) + msd.slice(1, msd.length);
         } else {
-            num = parseFloat(num); // to remove any leading zeros
-            var exp = parseInt($('#exponent').val());
-
-            if (num < 0) {
-                isPositive = false;
-                sign = 1;
-            }
-
-            num = Math.abs(num);
-            num = num.toString();
-
-            var numLength = getLength(num);
-
-            // standardize
-            // extend 0's if needed
-            if (numLength < 7) {
-                num = extend(num, 7);
-            }
-
-            var pointIndex = getPointIndex(num);
-            var digitAfterMSD = 1;
-
-            // move decimal point if needed
-            if (pointIndex != -1) {
-                var numToMove = 7 - pointIndex;
-                exp = exp - numToMove;
-                // remove point
-                num = normalize(num); 
-            }
-
-            // get MSD
-            var msd = extend(getBinary(num[0]), 4);
-
-            // get E
-            var ePrime = exp + 101;
-            ePrime = extend(getBinary(ePrime.toString()), 8);
-
-            if (isPositive) {
-                $('#sign').text('0');
-            } else {
-                $('#sign').text('1');
-            }
-
-            if (exp > 90) {
-                var combinationField = '11110';
-                var exponentContinuation = '000000';
-                var bcd1 = '0000000000';
-                var bcd2 = '0000000000';
-            } else {
-                if (msd[0] === '0') {
-                    var combinationField = ePrime.slice(0, 2) + msd.slice(1, msd.length);
-                } else {
-                    var combinationField = '11' + ePrime.slice(0, 2) + msd[3];
-                }
-
-                var exponentContinuation = ePrime.slice(2, ePrime.length);
-
-                // get BCD
-
-                var bcd1 = toBCD(num.slice(digitAfterMSD, digitAfterMSD + 3));
-                var bcd2 = toBCD(num.slice(digitAfterMSD + 3, num.length));
-            }
-        }
-        if (num === 'NaN') {
-            $('#sign').text('0');
-            sign = 0;
+          var combinationField = '11' + ePrime.slice(0, 2) + msd[3];
         }
 
-        var binaryRes = sign.toString() + combinationField.toString() + exponentContinuation.toString() +bcd1.toString()+bcd2.toString();
-        var temp = parseInt(binaryRes, 2).toString(16).toUpperCase();
+        var exponentContinuation = ePrime.slice(2, ePrime.length);
 
+        // get BCD
 
-        $('#combination-field').text(combinationField);
-        $('#exponent-continuation').text(exponentContinuation);
-        $('#bcd1').text(bcd1);
-        $('#bcd2').text(bcd2);
-        $('#hex').text(temp);
-    });
+        var bcd1 = toBCD(num.slice(digitAfterMSD, digitAfterMSD + 3));
+        var bcd2 = toBCD(num.slice(digitAfterMSD + 3, num.length));
+      }
+    }
+    if (num === 'NaN') {
+      $('#sign').text('0');
+      sign = 0;
+    }
 
-    $('#export').click(function () {
-        var inputNum = document.getElementById('num').value;
-        var inputExp = document.getElementById('exponent').value;
-        var outputSign = document.getElementById('sign').innerHTML;
-        var outputComb = document.getElementById('combination-field').innerHTML;
-        var outputExp = document.getElementById('exponent-continuation').innerHTML;
-        var outputBCD1 = document.getElementById('bcd1').innerHTML;
-        var outputBCD2 = document.getElementById('bcd2').innerHTML;
-        var outputHex = document.getElementById('hex').innerHTML;
+    var binaryRes =
+      sign.toString() +
+      combinationField.toString() +
+      exponentContinuation.toString() +
+      bcd1.toString() +
+      bcd2.toString();
+    var temp = parseInt(binaryRes, 2).toString(16).toUpperCase();
 
-        var data = '';
-        data += 'IEEE-754 Decimal-32 Floating-Point Converter' + '\n';
-        data +=
-            '---------------------------------------------------------------------' +
-            '\n';
+    $('#combination-field').text(combinationField);
+    $('#exponent-continuation').text(exponentContinuation);
+    $('#bcd1').text(bcd1);
+    $('#bcd2').text(bcd2);
+    $('#hex').text(temp);
+  });
 
-        data += 'Input: ' + inputNum + ' x10^ ' + inputExp + '\n';
-        data += '\n';
+  $('#export').click(function () {
+    var inputNum = document.getElementById('num').value;
+    var inputExp = document.getElementById('exponent').value;
+    var outputSign = document.getElementById('sign').innerHTML;
+    var outputComb = document.getElementById('combination-field').innerHTML;
+    var outputExp = document.getElementById('exponent-continuation').innerHTML;
+    var outputBCD1 = document.getElementById('bcd1').innerHTML;
+    var outputBCD2 = document.getElementById('bcd2').innerHTML;
+    var outputHex = document.getElementById('hex').innerHTML;
 
-        data += 'Sign: ' + outputSign + '\n';
-        data += 'Combination Field: ' + outputComb + '\n';
-        data += 'Exponent Continuation: ' + outputExp + '\n';
-        data += 'First 10 BCD: ' + outputBCD1 + '\n';
-        data += 'Last 10 BCD: ' + outputBCD2 + '\n';
-        data += '\n';
+    var data = '';
+    data += 'IEEE-754 Decimal-32 Floating-Point Converter' + '\n';
+    data +=
+      '---------------------------------------------------------------------' +
+      '\n';
 
+    data += 'Input: ' + inputNum + ' x10^ ' + inputExp + '\n';
+    data += '\n';
 
-        data += "Binary Floating-Point: " + outputSign + outputComb + outputExp + outputBCD1 + outputBCD2 + "\n";
-        data += 'Hexadecimal Equivalent: ' + outputHex;
+    data += 'Sign: ' + outputSign + '\n';
+    data += 'Combination Field: ' + outputComb + '\n';
+    data += 'Exponent Continuation: ' + outputExp + '\n';
+    data += 'First 10 BCD: ' + outputBCD1 + '\n';
+    data += 'Last 10 BCD: ' + outputBCD2 + '\n';
+    data += '\n';
 
-        const link = document.createElement('a');
-        const file = new Blob([data], { type: 'text/plain' });
+    data +=
+      'Binary Floating-Point: ' +
+      outputSign +
+      outputComb +
+      outputExp +
+      outputBCD1 +
+      outputBCD2 +
+      '\n';
+    data += 'Hexadecimal Equivalent: ' + outputHex;
 
-        link.href = URL.createObjectURL(file);
-        link.download = 'DecimalToText.txt';
-        link.click();
-        URL.revokeObjectURL(link.href);
-    });
+    const link = document.createElement('a');
+    const file = new Blob([data], { type: 'text/plain' });
+
+    link.href = URL.createObjectURL(file);
+    link.download = 'DecimalToText.txt';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  });
 });
