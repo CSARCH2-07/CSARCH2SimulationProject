@@ -188,7 +188,7 @@ $(document).ready(function () {
 
       // move decimal point if needed
       if (pointIndex != -1) {
-        var numToMove = 7 - pointIndex;
+        var numToMove = numLength - pointIndex;
         exp = exp - numToMove;
         // remove point
         num = normalize(num);
