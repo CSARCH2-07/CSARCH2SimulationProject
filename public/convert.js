@@ -256,7 +256,7 @@ $(document).ready(function () {
     $('#hex').text(temp);
   });
 
-  $('#export').click(function () {
+  $('#export').unbind('click').click(function () {
     var inputNum = document.getElementById('num').value;
     var inputExp = document.getElementById('exponent').value;
     var outputSign = document.getElementById('sign').innerHTML;
